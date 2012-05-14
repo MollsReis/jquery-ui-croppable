@@ -21,7 +21,6 @@
                 'width':      (self.image.innerWidth() * 0.90) + 'px',
                 'cursor':     'move',
                 'background-image': 'url("' + self.image.attr('src') + '")',
-                'background-position': self.image.offset().left + 'px ' + self.image.offset().top + 'px',
                 'background-repeat': 'no-repeat',
                 'background-attachment': 'fixed'
             });
@@ -43,6 +42,9 @@
                 'position': 'absolute'
             });
 
+            // line up background with possible scrolled page
+            Croppable.moveBackground();
+
             // crop box initial position
             $('#crop-box').offset({
                 top:  self.image.offset().top + (self.image.innerHeight() * 0.05),
@@ -62,6 +64,14 @@
             var top = $('#crop-box').position().top - self.image.position().top;
             var dimString = width + "x" + height + "+" + left + "+" + top;
             Croppable.cropCallback.call(this, dimString);
+        },
+
+        // move background when window scrolls
+        moveBackground: function() {
+            var top = self.image.offset().top - $(document).scrollTop();
+            $('#crop-box').css({
+                'background-position': self.image.offset().left + 'px ' + top + 'px'
+            });
         }
 
     };
@@ -71,6 +81,9 @@
         Croppable.init(this);
         Croppable.cropCallback = cropCallback;
         $(options.cropSelector).click(Croppable.crop);
+        $(window).scroll(function(){
+            Croppable.moveBackground();
+        });
         return this;
     };
 
