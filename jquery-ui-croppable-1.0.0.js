@@ -21,8 +21,8 @@
                 'width':      (self.image.innerWidth() * 0.90) + 'px',
                 'cursor':     'move',
                 'background-image': 'url("' + self.image.attr('src') + '")',
-                'background-position-y': self.image.position().top,
-                'background-position-x': self.image.position().left,
+                'background-position-y': self.image.offset().top,
+                'background-position-x': self.image.offset().left,
                 'background-repeat': 'no-repeat',
                 'background-attachment': 'fixed'
             });
