@@ -38,9 +38,6 @@
                 'opacity': '0.40',
                 'filter': 'alpha(opacity=40)'
             });
-            self.image.parent().css({
-                'position': 'absolute'
-            });
 
             // line up background with possible scrolled page
             Croppable.moveBackground();
