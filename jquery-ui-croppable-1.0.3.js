@@ -4,7 +4,7 @@
     var Croppable = {
 
         // size holding div, line up resizer div, and enable button
-        init: function(image) {
+        init: function(image, options) {
 
             // save image for crop to use
             self.image = image;
@@ -51,9 +51,17 @@
                 left: self.image.offset().left + (self.image.innerWidth() * 0.05)
             });
 
+            var resizableOptions = {
+                containment: self.image,
+                handles: {
+                    'se': '#resize-handle'
+                },
+                resize: options.resizeCallback
+            };
+
             // set crop box to be draggable and resizeable
             $('#crop-box').draggable({ containment: self.image })
-                          .resizable({ containment: self.image, handles: { 'se': '#resize-handle' } });
+                          .resizable(resizableOptions);
         },
 
         // send new image dimensions via post
@@ -72,14 +80,21 @@
             $('#crop-box').css({
                 'background-position': self.image.offset().left + 'px ' + top + 'px'
             });
-        }
+        },
 
+        // default options
+        defaults: {
+            resizeCallback: function() {}
+        }
     };
 
     // user end of croppable
     $.fn.croppable = function(options, cropCallback) {
-        Croppable.init(this);
+        var options = $.extend(true, {}, Croppable.defaults, options);
+
+        Croppable.init(this, options);
         Croppable.cropCallback = cropCallback;
+
         $(options.cropSelector).click(Croppable.crop);
         $(window).scroll(function(){
             Croppable.moveBackground();
