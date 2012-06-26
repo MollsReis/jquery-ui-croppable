@@ -10,26 +10,58 @@
             self.image = image;
 
             // create cropping box and resize handle
-            self.image.parent().append('<div id="crop-box"><div id="resize-handle"></div></div>');
-            $('#crop-box #resize-handle').addClass('ui-resizable-handle ui-resizable-se');
+            self.image.parent().append('<div id="crop-box">' +
+                '<div class="ui-resizable-handle ui-resizable-se" id="resize-handle-se"></div>' +
+                '<div class="ui-resizable-handle ui-resizable-sw" id="resize-handle-sw"></div>' +
+                '<div class="ui-resizable-handle ui-resizable-nw" id="resize-handle-nw"></div>' +
+                '<div class="ui-resizable-handle ui-resizable-ne" id="resize-handle-ne"></div>' +
+            '</div>');
 
             // style crop box, resize handle, and image
             $('#crop-box').css({
                 'z-index':    '1000',
                 'position':   'absolute',
-                'height':     (self.image.innerHeight() * 0.90) + 'px',
-                'width':      (self.image.innerWidth() * 0.90) + 'px',
                 'cursor':     'move',
                 'background-image': 'url("' + self.image.attr('src') + '")',
                 'background-repeat': 'no-repeat',
                 'background-attachment': 'fixed'
             });
-            $('#crop-box #resize-handle').css({
+            $('#crop-box #resize-handle-se').css({
                 'z-index':    '1001',
                 'position':   'absolute',
                 'bottom':     '0',
                 'right':      '0',
                 'cursor':     'se-resize',
+                'height':     '25px',
+                'width':      '25px',
+                'background': '#B94A48'
+            });
+            $('#crop-box #resize-handle-sw').css({
+                'z-index':    '1001',
+                'position':   'absolute',
+                'bottom':     '0',
+                'left':       '0',
+                'cursor':     'sw-resize',
+                'height':     '25px',
+                'width':      '25px',
+                'background': '#B94A48'
+            });
+            $('#crop-box #resize-handle-nw').css({
+                'z-index':    '1001',
+                'position':   'absolute',
+                'top':        '0',
+                'left':       '0',
+                'cursor':     'nw-resize',
+                'height':     '25px',
+                'width':      '25px',
+                'background': '#B94A48'
+            });
+            $('#crop-box #resize-handle-ne').css({
+                'z-index':    '1001',
+                'position':   'absolute',
+                'top':        '0',
+                'right':      '0',
+                'cursor':     'ne-resize',
                 'height':     '25px',
                 'width':      '25px',
                 'background': '#B94A48'
@@ -45,17 +77,19 @@
             // line up background with possible scrolled page
             Croppable.moveBackground();
 
-            // crop box initial position
+            // crop box initial position and size
             $('#crop-box').offset({
                 top:  self.image.offset().top + (self.image.innerHeight() * 0.05),
                 left: self.image.offset().left + (self.image.innerWidth() * 0.05)
             });
+            $('#crop-box').css({
+                'height': (self.image.innerHeight() * 0.90) + 'px',
+                'width':  (self.image.innerWidth() * 0.90) + 'px'
+            });
 
             var resizableOptions = {
                 containment: self.image,
-                handles: {
-                    'se': '#resize-handle'
-                },
+                handles: options.resizeHandles,
                 resize: options.resizeCallback
             };
 
@@ -84,7 +118,13 @@
 
         // default options
         defaults: {
-            resizeCallback: function() {}
+            resizeCallback: function() {},
+            resizeHandles: {
+                'se': '#resize-handle-se',
+                'sw': '#resize-handle-sw',
+                'nw': '#resize-handle-nw',
+                'ne': '#resize-handle-ne'
+            }
         }
     };
 
