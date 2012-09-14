@@ -77,14 +77,29 @@
             // line up background with possible scrolled page
             Croppable.moveBackground();
 
+            var imageHeight = self.image.innerHeight();
+            var imageWidth = self.image.innerWidth();
+
+            var cropBoxHeight = (imageHeight * 0.90) + 'px';
+            var cropBoxWidth = (imageWidth * 0.90) + 'px';
+
+            if (options.cropBoxHeight) {
+                cropBoxHeight = (parseInt(options.cropBoxHeight) > imageHeight) ? imageHeight : options.cropBoxHeight
+            }
+
+            if (options.cropBoxWidth) {
+                cropBoxWidth = (parseInt(options.cropBoxWidth) > imageWidth) ? imageWidth : options.cropBoxWidth
+            }
+
+            var imageOffset = self.image.offset();
+
             // crop box initial position and size
             $('#crop-box').offset({
-                top:  self.image.offset().top + (self.image.innerHeight() * 0.05),
-                left: self.image.offset().left + (self.image.innerWidth() * 0.05)
-            });
-            $('#crop-box').css({
-                'height': (self.image.innerHeight() * 0.90) + 'px',
-                'width':  (self.image.innerWidth() * 0.90) + 'px'
+                top:  imageOffset.top + ((imageHeight * 0.5) - (parseInt(cropBoxHeight) * 0.5)),
+                left: imageOffset.left + ((imageWidth * 0.5) - (parseInt(cropBoxWidth) * 0.5))
+            }).css({
+                height: cropBoxHeight,
+                width:  cropBoxWidth
             });
 
             var resizableOptions = {
