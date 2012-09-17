@@ -157,4 +157,13 @@
         return this;
     };
 
+    $.fn.destroyCroppable = function() {
+        this.css('opacity', 1)
+            .parent()
+            .find('#crop-box')
+            .draggable('destroy')
+            .resizable('destroy')
+            .remove();
+    }
+
 })( jQuery );
